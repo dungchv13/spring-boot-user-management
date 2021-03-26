@@ -26,11 +26,14 @@ public class UserController {
     private RoleService roleService;
 
     @GetMapping("/all")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public List<User> getUsers() {
-        return (List<User>) userService.findAll();
+        List<User> userList = (List<User>) userService.findAll();
+        return userList;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/search/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public User getUser(@PathVariable("id") int id) {
         Optional<User> user = userService.findById(id);
         if (user.isPresent()) {
@@ -43,26 +46,32 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<User> createUser(@RequestBody User user) {
         user.setUsername(user.getEmail());
-        if(userService.existsByUsername(user.getUsername()) || userService.existsByEmail(user.getEmail())) {
+        if (userService.existsByUsername(user.getUsername()) ||
+                userService.existsByEmail(user.getEmail()) ||
+                userService.existsByAccount_number(user.getAccount_number())) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         Set<Role> roles = new HashSet<>();
         Role userRole = roleService.findById(2).get();
         roles.add(userRole);
-        if(user.getPassword()==null){
+        user.setRoles(roles);
+
+        if (user.getPassword() == null) {
             user.setPassword("123456");
         }
-        user.setRoles(roles);
-        userService.save(user);
-        return new ResponseEntity(HttpStatus.OK);
+        User user1 = userService.save(user);
+        return new ResponseEntity(user1, HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> deleteUser(@PathVariable("id") int id) {
-        userService.remove(id);
-        return new ResponseEntity<>("User has been removed",HttpStatus.OK);
+        boolean isDeleted = userService.remove(id);
+        if (isDeleted) {
+            return new ResponseEntity<>("User has been removed", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Cant find user", HttpStatus.OK);
     }
 
     @PutMapping("/update/{id}")
@@ -70,7 +79,28 @@ public class UserController {
     public ResponseEntity<User> updateUser(@PathVariable("id") int id, @RequestBody User user) {
         Optional<User> oldUser = userService.findById(id);
         if (oldUser.isPresent()) {
-            oldUser.get().setAccount_number(user.getAccount_number());
+
+            if (!user.getUsername().equals(oldUser.get().getUsername())) {
+                if (userService.existsByUsername(user.getUsername())) {
+                    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                }
+                oldUser.get().setUsername(user.getUsername());
+            }
+
+            if (!user.getEmail().equals(oldUser.get().getEmail())) {
+                if (userService.existsByEmail(user.getEmail())) {
+                    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                }
+                oldUser.get().setEmail(user.getEmail());
+            }
+
+            if (user.getAccount_number() != oldUser.get().getAccount_number()) {
+                if (userService.existsByAccount_number(user.getAccount_number())) {
+                    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                }
+                oldUser.get().setAccount_number(user.getAccount_number());
+            }
+
             oldUser.get().setBalance(user.getBalance());
 
             oldUser.get().setFirstname(user.getFirstname());
@@ -99,7 +129,9 @@ public class UserController {
                 }
             });
             oldUser.get().setRoles(roles);
-            if(!user.getPassword().equals(oldUser.get().getPassword())) {
+
+
+            if (!user.getPassword().equals(oldUser.get().getPassword())) {
                 oldUser.get().setPassword(user.getPassword());
                 userService.save(oldUser.get());
             } else {
@@ -110,6 +142,39 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+    //Search
+
+    @GetMapping("/searchName/{keyword}")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    public List<User> searchName(@PathVariable("keyword") String keyword) {
+        return (List<User>) userService.searchName(keyword);
+    }
+
+    @GetMapping("/searchAddress/{keyword}")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    public List<User> searchAddress(@PathVariable("keyword") String keyword) {
+        return (List<User>) userService.searchAddress(keyword);
+    }
+
+    @GetMapping("/searchAccountNumber/{accountNumber}")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    public List<User> searchAccountNumber(@PathVariable("accountNumber") int accountNumber) {
+        return (List<User>) userService.searchAccountNumber(accountNumber);
+    }
+
+    @GetMapping("/searchBalanceG/{balance}")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    public List<User> searchBalanceG(@PathVariable("balance") int balance) {
+        return (List<User>) userService.searchBalanceG(balance);
+    }
+
+    @GetMapping("/searchBalanceL/{balance}")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    public List<User> searchBalanceL(@PathVariable("balance") int balance) {
+        return (List<User>) userService.searchBalanceL(balance);
+    }
+
 
 }
 

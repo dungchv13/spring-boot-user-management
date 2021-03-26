@@ -47,7 +47,9 @@ public class DemoApplication {
             roleAdmin.setId(1);
             roleAdmin.setName("ROLE_ADMIN");
             roles.add(roleAdmin);
+            admin.setAccount_number(10000);
             admin.setUsername("admin");
+            admin.setEmail("admin@admin.com");
             admin.setPassword("123456");
             admin.setRoles(roles);
             userService.save(admin);

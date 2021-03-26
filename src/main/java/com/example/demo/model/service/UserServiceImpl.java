@@ -10,13 +10,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -50,8 +50,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void remove(int id) {
-        userRepository.deleteById(id);
+    public boolean remove(int id) {
+        if(findById(id).isPresent()){
+                userRepository.deleteById(id);
+                return true;
+        }
+        return false;
     }
 
     @Override
@@ -78,6 +82,38 @@ public class UserServiceImpl implements UserService {
         return userRepository.existsByEmail(email);
     }
 
+    @Override
+    public boolean existsByAccount_number(int accountNumber) {
+        List<User> userList = (List<User>) searchAccountNumber(accountNumber);
+        return !userList.isEmpty();
+    }
+
+    @Override
+    public Iterable<User> searchName(String keyword) {
+        keyword = "%"+keyword+"%";
+        return userRepository.searchName(keyword);
+    }
+
+    @Override
+    public Iterable<User> searchAddress(String keyword) {
+        keyword = "%"+keyword+"%";
+        return userRepository.searchAddress(keyword);
+    }
+
+    @Override
+    public Iterable<User> searchAccountNumber(int accountNumber) {
+        return userRepository.searchAccountNumber(accountNumber);
+    }
+
+    @Override
+    public Iterable<User> searchBalanceG(int balance) {
+        return userRepository.searchBalanceG(balance);
+    }
+
+    @Override
+    public Iterable<User> searchBalanceL(int balance) {
+        return userRepository.searchBalanceL(balance);
+    }
 
 
 }

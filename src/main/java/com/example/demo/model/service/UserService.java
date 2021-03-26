@@ -15,7 +15,7 @@ public interface UserService extends UserDetailsService {
 
     void saveAll(Set<User> userSet);
 
-    void remove(int id);
+    boolean remove(int id);
 
     Optional<User> findByUsername(String username);
 
@@ -23,7 +23,17 @@ public interface UserService extends UserDetailsService {
 
     boolean existsByEmail(String email);
 
+    boolean existsByAccount_number(int accountNumber);
+
     User saveWithOutEncodePass(User user);
 
+    Iterable<User> searchName(String keyword);
 
+    Iterable<User> searchAddress(String keyword);
+
+    Iterable<User> searchAccountNumber(int accountNumber);
+
+    Iterable<User> searchBalanceG(int balance);
+
+    Iterable<User> searchBalanceL(int balance);
 }

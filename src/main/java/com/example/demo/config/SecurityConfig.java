@@ -18,7 +18,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    private static final String[] CSRF_IGNORE = {"/*","/product/*"};
+//    private static final String[] CSRF_IGNORE = {"/*","/product/*"};
 
     @Autowired
     private UserService userService;
@@ -59,9 +59,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().ignoringAntMatchers("/**");
         http.httpBasic().authenticationEntryPoint(restServicesEntryPoint());
         http.authorizeRequests()
-                .antMatchers(
-                        "/",
-                        "/login")
+                .antMatchers("/",
+                        "/login",
+                        "/user/**")
                 .permitAll()
                 .anyRequest().authenticated()
                 .and().csrf().disable();
