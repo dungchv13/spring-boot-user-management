@@ -36,4 +36,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Query(value = "select * from user where balance <= ?1 ", nativeQuery = true)
     Iterable<User> searchBalanceL(int balance);
+
+    @Query(value = "select * from user where employer like ?1 ;", nativeQuery = true)
+    Iterable<User> searchEmployer(String employer);
 }

@@ -33,6 +33,8 @@ public class User {
 
     private String city;
 
+    private String employer;
+
     private String state;
 
     private String email;

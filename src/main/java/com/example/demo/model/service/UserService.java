@@ -36,4 +36,6 @@ public interface UserService extends UserDetailsService {
     Iterable<User> searchBalanceG(int balance);
 
     Iterable<User> searchBalanceL(int balance);
+
+    Iterable<User> searchEmployer(String employer);
 }

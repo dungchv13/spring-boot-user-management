@@ -147,7 +147,7 @@ public class UserController {
 
     @GetMapping("/searchName/{keyword}")
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
-    public List<User> searchName(@PathVariable("keyword") String keyword) {
+    public List<User> searchName(@PathVariable(value = "keyword",required = false) String keyword) {
         return (List<User>) userService.searchName(keyword);
     }
 
@@ -173,6 +173,12 @@ public class UserController {
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public List<User> searchBalanceL(@PathVariable("balance") int balance) {
         return (List<User>) userService.searchBalanceL(balance);
+    }
+
+    @GetMapping("/searchEmployer/{employer}")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    public List<User> searchEmployer(@PathVariable("employer") String employer){
+        return (List<User>) userService.searchEmployer(employer);
     }
 
 

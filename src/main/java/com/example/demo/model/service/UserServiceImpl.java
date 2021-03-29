@@ -115,5 +115,11 @@ public class UserServiceImpl implements UserService {
         return userRepository.searchBalanceL(balance);
     }
 
+    @Override
+    public Iterable<User> searchEmployer(String employer) {
+        employer = "%"+employer+"%";
+        return userRepository.searchEmployer(employer);
+    }
+
 
 }

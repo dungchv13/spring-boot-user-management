@@ -30,8 +30,8 @@ public class LoginController {
     @Autowired
     private UserService userService;
 
-//    @Autowired
-//    private RoleService roleService;
+    @Autowired
+    private RoleService roleService;
 
 
     @PostMapping("/login")
@@ -47,22 +47,22 @@ public class LoginController {
         return ResponseEntity.ok(new JwtResponse(jwt, currentUser.getId(), userDetails.getUsername(), userDetails.getAuthorities()));
     }
 
-//    @PostMapping("/test")
-//    public boolean saveData(@RequestBody Set<User> userSet){
-//        try{
-//            Set<Role> roles = new HashSet<>();
-//            Role userRole = roleService.findById(2).get();
-//            roles.add(userRole);
-//            for (User u:userSet) {
-//                u.setUsername(u.getEmail());
-//                u.setRoles(roles);
-//                u.setPassword("123456");
-//            }
-//            userService.saveAll(userSet);
-//            return true;
-//        }catch (Exception e){
-//            return false;
-//        }
-//
-//    }
+    @PostMapping("/test")
+    public boolean saveData(@RequestBody Set<User> userSet){
+        try{
+            Set<Role> roles = new HashSet<>();
+            Role userRole = roleService.findById(2).get();
+            roles.add(userRole);
+            for (User u:userSet) {
+                u.setUsername(u.getEmail());
+                u.setRoles(roles);
+                u.setPassword("123456");
+            }
+            userService.saveAll(userSet);
+            return true;
+        }catch (Exception e){
+            return false;
+        }
+
+    }
 }
