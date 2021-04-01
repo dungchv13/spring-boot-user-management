@@ -8,7 +8,7 @@ import javax.persistence.*;
 
 import java.util.Set;
 
-@Entity
+@Entity(name = "account")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
