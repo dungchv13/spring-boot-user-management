@@ -18,9 +18,11 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(unique=true, nullable=false)
     private String username;
     private String password;
 
+    @Column(unique=true, nullable=false)
     private int account_number;
     private int balance;
 
@@ -37,6 +39,7 @@ public class User {
 
     private String state;
 
+    @Column(unique=true, nullable=false)
     private String email;
 
     private String address;

@@ -7,6 +7,7 @@ import com.example.demo.model.service.RoleService;
 import com.example.demo.model.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -48,6 +49,7 @@ public class LoginController {
     }
 
     @PostMapping("/test")
+    @PreAuthorize("hasRole('ADMIN')")
     public boolean saveData(@RequestBody Set<User> userSet){
         try{
             Set<Role> roles = new HashSet<>();
