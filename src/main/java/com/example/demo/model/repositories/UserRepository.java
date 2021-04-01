@@ -16,27 +16,27 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 //    boolean existsByAccount_number(int accountNumber);
 
 
-    @Query(value = "select * from user where " +
+    @Query(value = "select * from account where " +
             "email like ?1 \n" +
             "or firstname like ?1 \n" +
             "or lastname like ?1 ;", nativeQuery = true)
     Iterable<User> searchName(String keyword);
 
-    @Query(value = "select * from user where \n" +
+    @Query(value = "select * from account where \n" +
             "address like ?1 \n" +
             "or city like ?1 \n" +
             "or state like ?1 ;", nativeQuery = true)
     Iterable<User> searchAddress(String keyword);
 
-    @Query(value = "select * from user where account_number = ?1", nativeQuery = true)
+    @Query(value = "select * from account where account_number = ?1", nativeQuery = true)
     Iterable<User> searchAccountNumber(int accountNumber);
 
-    @Query(value = "select * from user where balance >= ?1 ", nativeQuery = true)
+    @Query(value = "select * from account where balance >= ?1 ", nativeQuery = true)
     Iterable<User> searchBalanceG(int balance);
 
-    @Query(value = "select * from user where balance <= ?1 ", nativeQuery = true)
+    @Query(value = "select * from account where balance <= ?1 ", nativeQuery = true)
     Iterable<User> searchBalanceL(int balance);
 
-    @Query(value = "select * from user where employer like ?1 ;", nativeQuery = true)
+    @Query(value = "select * from account where employer like ?1 ;", nativeQuery = true)
     Iterable<User> searchEmployer(String employer);
 }
