@@ -18,7 +18,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-//    private static final String[] CSRF_IGNORE = {"/*","/product/*"};
+
 
     @Autowired
     private UserService userService;
